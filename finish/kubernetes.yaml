@@ -9,9 +9,6 @@ spec:
     matchLabels:
       app: system
   template:
-    metadata:
-      labels:
-        app: system
     spec:
       containers:
       # tag::system-container[]
@@ -69,6 +66,9 @@ spec:
             # end::secretRef2[]
         # end::sysPassword1[]
       # end::system-container[]
+    metadata:
+      labels:
+        app: system
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -88,11 +88,6 @@ spec:
       containers:
       # tag::inventory-container[]
       - name: inventory-container
-        image: inventory:1.0-SNAPSHOT
-        ports:
-        - containerPort: 9080
-        # Set the environment variables
-        # tag::env2[]
         env:
         # end::env2[]
         # tag::contextRoot2[]
@@ -118,10 +113,10 @@ spec:
             # tag::secretRef3[]
             secretKeyRef:
               # tag::credentials3[]
-              name: sys-app-credentials
               # end::credentials3[]
               # tag::username2[]
               key: username
+              name: sys-app-credentials
               # end::username2[]
             # end::secretRef3[]
         # end::sysUsername2[]
@@ -141,6 +136,11 @@ spec:
             # end::secretRef4[]
         # end::sysPassword2[]
       # end::inventory-container[]
+        ports:
+        - containerPort: 9080
+        # Set the environment variables
+        # tag::env2[]
+        image: inventory:1.0-SNAPSHOT
 ---
 apiVersion: v1
 kind: Service
